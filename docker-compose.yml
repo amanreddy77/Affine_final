@@ -1,0 +1,92 @@
+services:
+     affine:
+       build:
+         context: .
+         dockerfile: ./Dockerfile
+       image: custom-affine:latest
+       ports:
+         - "3000:3000"
+       environment:
+         - NODE_ENV=production
+         - AFFINE_BACKEND_URL=http://backend:4000
+         - CHATWOOT_URL=http://chatwoot:3000
+       volumes:
+         - ./tenants.json:/app/tenants.json:ro
+       depends_on:
+         - backend
+         - chatwoot
+       networks:
+         - app-network
+       restart: unless-stopped
+
+     chatwoot:
+       image: chatwoot/chatwoot:latest
+       depends_on:
+         - postgres
+         - redis
+       ports:
+         - "127.0.0.1:3001:3000"
+       environment:
+         - RAILS_ENV=production
+         - NODE_ENV=production
+         - INSTALLATION_ENV=docker
+         - FRONTEND_URL=http://localhost:3001
+         - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+         - POSTGRES_HOST=postgres
+         - POSTGRES_DATABASE=chatwoot
+         - POSTGRES_USERNAME=postgres
+         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+         - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
+         - REDIS_PASSWORD=${REDIS_PASSWORD}
+       volumes:
+         - chatwoot_storage:/app/storage
+       command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+       networks:
+         - app-network
+       restart: unless-stopped
+
+     backend:
+       build:
+         context: .
+         dockerfile: backend.Dockerfile
+       ports:
+         - "4000:4000"
+       volumes:
+         - ./tenants.json:/app/tenants.json:ro
+       networks:
+         - app-network
+       restart: unless-stopped
+
+     postgres:
+       image: pgvector/pgvector:pg16
+       environment:
+         - POSTGRES_DB=chatwoot
+         - POSTGRES_USER=postgres
+         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+       volumes:
+         - pgdata:/var/lib/postgresql/data
+       ports:
+         - "127.0.0.1:5432:5432"
+       networks:
+         - app-network
+       restart: unless-stopped
+
+     redis:
+       image: redis:alpine
+       command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+       volumes:
+         - redis_data:/data
+       ports:
+         - "127.0.0.1:6379:6379"
+       networks:
+         - app-network
+       restart: unless-stopped
+
+volumes:
+     chatwoot_storage:
+     pgdata:
+     redis_data:
+
+networks:
+     app-network:
+       driver: bridge

@@ -1,0 +1,26 @@
+[
+	{
+		"id": "acme",
+		"name": "Acme Corp",
+		"logo": "/branding/acme-logo.png",
+		"themeColor": "#1976d2",
+		"title": "Acme Workspace",
+		"chatwoot": {
+			"websiteToken": "acme-chatwoot-token",
+			"baseUrl": "http://localhost:3001",
+			"widgetColor": "#1976d2"
+		}
+	},
+	{
+		"id": "globex",
+		"name": "Globex Inc",
+		"logo": "/branding/globex-logo.png",
+		"themeColor": "#e53935",
+		"title": "Globex Dashboard",
+		"chatwoot": {
+			"websiteToken": "globex-chatwoot-token",
+			"baseUrl": "http://localhost:3001",
+			"widgetColor": "#e53935"
+		}
+	}
+]

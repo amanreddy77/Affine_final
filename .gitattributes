@@ -1,0 +1,2 @@
+*.node filter=lfs diff=lfs merge=lfs -text
+**/Electron[[:space:]]Framework filter=lfs diff=lfs merge=lfs -text
