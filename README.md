@@ -1,7 +1,10 @@
 # README.md
 
 ## Affine + Chatwoot White-Labelled Monorepo
-<video controls src="WhatsApp Video 2025-06-29 at 23.11.07.mp4" title="<video controls src="WhatsApp Video 2025-06-29 at 23.11.07.mp4" title="demo"></video>"></video>
+## Demo
+
+[![Watch the demo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://drive.google.com/file/d/1Bx_gd8IM9bw3rWeoz6-Ja5RItBvsq-PS/view?usp=sharing)
+
 This project demonstrates a multi-tenant, white-labelled Affine workspace with Chatwoot integration, using Docker Compose.
 
 ---
